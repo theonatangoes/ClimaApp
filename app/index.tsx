@@ -15,8 +15,9 @@ import {
   View,
 } from "react-native";
 
-// --- CHAVE API ---
-const API_KEY = "a3e121329c34edcf8c5ae339c9876e4b";
+// --- CHAVE API COM VARIÁVEL DE AMBIENTE ---
+const API_KEY =
+  process.env.EXPO_PUBLIC_WEATHER_API_KEY || "a3e121329c34edcf8c5ae339c9876e4b";
 
 // Interface para os dados do clima
 interface WeatherData {
@@ -75,47 +76,41 @@ const popularCities = [
   "Paris",
 ];
 
-// Imagens de fundo (mantidas as mesmas)
+// Imagens de fundo com fallback local
 const backgroundImages = {
   "01d":
     "https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1974&auto=format&fit=crop",
   "02d":
-    "https://img.freepik.com/fotos-gratis/bela-paisagem-celeste-durante-o-dia_23-2149265586.jpg?semt=ais_hybrid&w=740&q=80",
+    "https://img.freepik.com/fotos-gratis/bela-paisagem-celeste-durante-o-dia_23-2149265586.jpg",
   "01n":
-    "https://img.freepik.com/fotos-gratis/imagem-vertical-de-um-belo-ceu-estrelado_181624-42267.jpg?semt=ais_hybrid&w=740&q=80",
-  "02n":
-    "https://images.unsplash.com/photo-1595178302776-fa04e6d45879?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGMlQzMlQTl1JTIwZXN0cmVsYWRvfGVufDB8fDB8fHww&fm=jpg&q=60&w=3000",
+    "https://images.unsplash.com/photo-1534796636918-0d2d0e8fe809?q=80&w=1000",
+  "02n": "https://images.unsplash.com/photo-1595178302776-fa04e6d45879",
   "03d":
     "https://img.freepik.com/fotos-premium/natureza-do-sol-no-ceu-nublado-com-nuvens_73110-10563.jpg",
   "04d":
     "https://img.freepik.com/fotos-gratis/nuvens-de-tempestade_1122-2845.jpg",
-  "03n":
-    "https://images.unsplash.com/photo-1500740516770-92bd004b996e?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExfHx8ZW58MHx8fHx8",
-  "04n":
-    "https://images.unsplash.com/photo-1595736516846-c9fe0cb86f7c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YyVDMyVBOXUlMjBub3R1cm5vJTIwbnVibGFkb3xlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+  "03n": "https://images.unsplash.com/photo-1500740516770-92bd004b996e",
+  "04n": "https://images.unsplash.com/photo-1595736516846-c9fe0cb86f7c",
   "09d":
-    "https://media.istockphoto.com/id/2183276741/pt/foto/dark-overcast-sky-with-heavy-rain-and-lightning-intense-weather-phenomenon.jpg?s=612x612&w=0&k=20&c=tFGmcMSTCig3yTyQI3UDjTH_FUGVc4OQ-6UlbPmjhL0=",
+    "https://media.istockphoto.com/id/2183276741/pt/foto/dark-overcast-sky-with-heavy-rain-and-lightning.jpg",
   "09n":
-    "https://static.vecteezy.com/ti/fotos-gratis/p2/8900318-chuva-a-noite-fundo-escuro-tiro-de-chuva-caindo-gratis-foto.JPG",
+    "https://static.vecteezy.com/ti/fotos-gratis/p2/8900318-chuva-a-noite-fundo-escuro.jpg",
   "10d":
-    "https://img.freepik.com/fotos-premium/a-chuva-cai-na-janela-com-nuvens-e-fundo-do-ceu-apos-a-chuva_719722-909.jpg",
+    "https://img.freepik.com/fotos-premium/a-chuva-cai-na-janela-com-nuvens_719722-909.jpg",
   "10n":
-    "https://img.freepik.com/fotos-premium/foto-impressionante-fundo-preto-com-chuva-forte-caindo-gotas-de-chuva-batendo-no-chao-chuvoso-ceu-noturno-um_900706-61077.jpg?semt=ais_hybrid&w=740&q=80",
+    "https://img.freepik.com/fotos-premium/foto-impressionante-fundo-preto-com-chuva_900706-61077.jpg",
   "11d": "https://pixnio.com/free-images/2017/08/15/2017-08-15-09-58-11.jpg",
   "11n":
     "https://pixnio.com/free-images/2017/08/31/2017-08-31-06-26-19-1000x662.jpg",
   "13d":
-    "https://img.freepik.com/fotos-gratis/bela-foto-de-montanhas-e-arvores-cobertas-de-neve-e-neblina_181624-17590.jpg?semt=ais_hybrid&w=740&q=80",
+    "https://img.freepik.com/fotos-gratis/bela-foto-de-montanhas-e-arvores-cobertas-de-neve_181624-17590.jpg",
   "13n":
-    "https://img.freepik.com/fotos-gratis/vista-do-ceu-noturno-estrelado-com-natureza-e-paisagem-montanhosa_23-2151614765.jpg?semt=ais_hybrid&w=740&q=80",
+    "https://img.freepik.com/fotos-gratis/vista-do-ceu-noturno-estrelado_23-2151614765.jpg",
   "50d":
     "https://uploads.metroimg.com/wp-content/uploads/2017/02/28093850/Neblina.jpg",
-  "50n":
-    "https://s2-g1.glbimg.com/QCRy0SnilibLE2tWlhqaK5CetJc=/0x0:1600x1200/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2022/p/P/rpZhDfT9iHhytlmSazRg/nevoa-belem-christian-emanoel.jpeg",
-  default_day:
-    "https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1974&auto=format&fit=crop",
-  default_night:
-    "https://www.shutterstock.com/image-photo/movement-stars-night-sky-view-600nw-2626239147.jpg",
+  "50n": "https://s2-g1.glbimg.com/QCRy0SnilibLE2tWlhqaK5CetJc",
+  default_day: "https://images.unsplash.com/photo-1601297183305-6df142704ea2",
+  default_night: "https://images.unsplash.com/photo-1534796636918-0d2d0e8fe809",
 };
 
 // Mapeamento de ícones
@@ -150,6 +145,7 @@ export default function App() {
     backgroundImages.default_day
   );
   const [cityLocalTime, setCityLocalTime] = useState<string>("");
+  const [imageLoading, setImageLoading] = useState(true);
 
   // Efeito principal
   useEffect(() => {
@@ -189,30 +185,70 @@ export default function App() {
           : backgroundImages.default_night);
 
       setCurrentBackground(backgroundUrl);
+      setImageLoading(true);
     } catch (error) {
       console.error("Erro ao calcular hora local:", error);
       setCityLocalTime("--:--");
     }
   };
 
+  const handleImageError = () => {
+    console.log("❌ Erro ao carregar imagem, usando fallback...");
+    setCurrentBackground(backgroundImages.default_day);
+    setImageLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
   const initializeApp = async () => {
     setLoading(true);
     try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg(
-          "📍 Permissão de localização negada. Use a busca para encontrar uma cidade."
-        );
-        setLoading(false);
-        setIsSearching(true);
-        return;
-      }
+      // Verifica se estamos no navegador (Web)
+      const isWeb = typeof window !== "undefined";
 
-      let currentLocation = await Location.getCurrentPositionAsync({});
-      await fetchWeatherByCoords(
-        currentLocation.coords.latitude,
-        currentLocation.coords.longitude
-      );
+      if (isWeb) {
+        // No navegador, usa geolocation API do navegador
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              await fetchWeatherByCoords(
+                position.coords.latitude,
+                position.coords.longitude
+              );
+            },
+            (error) => {
+              console.log("📍 Geolocalização negada:", error);
+              setErrorMsg(
+                "📍 Permissão de localização negada. Use a busca para encontrar uma cidade."
+              );
+              setLoading(false);
+              setIsSearching(true);
+            }
+          );
+        } else {
+          // Fallback para uma cidade padrão
+          await fetchWeatherByCity("São Paulo");
+        }
+      } else {
+        // Em app nativo, usa expo-location
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          setErrorMsg(
+            "📍 Permissão de localização negada. Use a busca para encontrar uma cidade."
+          );
+          setLoading(false);
+          setIsSearching(true);
+          return;
+        }
+
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        await fetchWeatherByCoords(
+          currentLocation.coords.latitude,
+          currentLocation.coords.longitude
+        );
+      }
     } catch (error) {
       console.error("Erro na localização:", error);
       await fetchWeatherByCity("São Paulo");
@@ -269,13 +305,15 @@ export default function App() {
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          setErrorMsg("🔑 CHAVE API INVÁLIDA");
+          setErrorMsg("🔑 Erro de autenticação da API");
           break;
         case 404:
           setErrorMsg(`📍 Cidade "${location}" não encontrada`);
           break;
         case 429:
-          setErrorMsg("⚡ Limite de requisições excedido");
+          setErrorMsg(
+            "⚡ Limite de requisições excedido. Tente novamente em alguns minutos."
+          );
           break;
         default:
           setErrorMsg(`❌ Erro ${error.response.status}`);
@@ -320,7 +358,7 @@ export default function App() {
         <Text style={styles.searchButtonText}>Minha localização atual</Text>
       </TouchableOpacity>
 
-      <Text style={styles.searchSectionTitle}>Cidades Brasileiras</Text>
+      <Text style={styles.searchSectionTitle}>🌎 Cidades Brasileiras</Text>
       <View style={styles.cityGrid}>
         {recommendedCities.map((city) => (
           <TouchableOpacity
@@ -333,7 +371,7 @@ export default function App() {
         ))}
       </View>
 
-      <Text style={styles.searchSectionTitle}>Cidades Internacionais</Text>
+      <Text style={styles.searchSectionTitle}>🌍 Cidades Internacionais</Text>
       <View style={styles.cityGrid}>
         {popularCities.map((city) => (
           <TouchableOpacity
@@ -375,6 +413,17 @@ export default function App() {
           >
             <Text style={styles.retryButtonText}>Buscar Outra Cidade</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.retryButton,
+              { marginTop: 10, backgroundColor: "rgba(255, 255, 255, 0.2)" },
+            ]}
+            onPress={initializeApp}
+          >
+            <Text style={styles.retryButtonText}>
+              Tentar Localização Novamente
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -400,6 +449,12 @@ export default function App() {
 
     return (
       <View style={styles.weatherContainer}>
+        {imageLoading && (
+          <View style={styles.imageLoadingOverlay}>
+            <ActivityIndicator size="small" color="#fff" />
+          </View>
+        )}
+
         <View style={styles.timeIndicator}>
           <MaterialCommunityIcons
             name={timeOfDay === "day" ? "weather-sunny" : "weather-night"}
@@ -468,7 +523,7 @@ export default function App() {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Nascer e Pôr do Sol</Text>
+          <Text style={styles.cardTitle}>🌅 Nascer e Pôr do Sol</Text>
           <View style={styles.sunContainer}>
             <View style={styles.sunItem}>
               <Feather name="sunrise" size={28} color="#F9A825" />
@@ -496,6 +551,8 @@ export default function App() {
       source={{ uri: currentBackground }}
       style={styles.background}
       imageStyle={{ opacity: 0.9 }}
+      onLoad={handleImageLoad}
+      onError={handleImageError}
     >
       <SafeAreaView style={styles.container}>
         <StatusBar
@@ -555,6 +612,12 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+  },
+  imageLoadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
 
   // Barra de pesquisa
